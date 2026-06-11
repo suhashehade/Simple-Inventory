@@ -17,7 +17,10 @@ public class Inventory
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> a65b852f8ca639ae599a5c9300651c4a56fdf11d
     
     public static void AddProduct(Product product) {
         Products.Add(product);
@@ -40,6 +43,9 @@ public class Inventory
                 Console.WriteLine($"{ p.Name,-10 } { p.Price,-10 } { p.Quantity,-10 }");
             }
     }
+<<<<<<< HEAD
 >>>>>>> 7269152 (feat: create inventory & product classes)
+=======
+>>>>>>> a65b852f8ca639ae599a5c9300651c4a56fdf11d
 
 }
