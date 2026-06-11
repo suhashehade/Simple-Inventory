@@ -37,6 +37,10 @@ while (true)
                 Inventory.DisplayInstructions();
                 break;
             }
+        case "q":
+            {
+                return;
+            }
 
         default:
             Console.Clear();
