@@ -16,36 +16,5 @@ public class Inventory
             return _instatnce;
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> a65b852f8ca639ae599a5c9300651c4a56fdf11d
-    
-    public static void AddProduct(Product product) {
-        Products.Add(product);
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("The product added successfully ✔️✔️");
-        Console.ResetColor();
-    }
-
-    public static void DisplayProducts() {
-        if(Products.Count == 0)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("No products to display");
-            Console.ResetColor();
-        }
-        Console.WriteLine("{0,-10} {1,-10} {2,-10}", "Name", "Price", "Quantity");
-        Console.WriteLine("------------------------------------");
-        foreach (var p in Products)
-            {
-                Console.WriteLine($"{ p.Name,-10 } { p.Price,-10 } { p.Quantity,-10 }");
-            }
-    }
-<<<<<<< HEAD
->>>>>>> 7269152 (feat: create inventory & product classes)
-=======
->>>>>>> a65b852f8ca639ae599a5c9300651c4a56fdf11d
 
 }
