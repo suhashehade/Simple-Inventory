@@ -10,7 +10,7 @@ Console.WriteLine("""
         ---------------------------------------
         """);
 string? input = Console.ReadLine();
-while(true)
+while (true)
 {
     switch (input?.ToLower())
     {
@@ -50,8 +50,17 @@ while(true)
                 Inventory.AddProduct(product);
                 break;
             }
-        
-        
+        case "r":
+            {
+                Console.WriteLine("""
+                All products:
+                """);
+                Inventory.DisplayProducts();
+                break;
+            }
+
+
+
     }
     input = Console.ReadLine();
 }
