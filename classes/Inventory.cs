@@ -16,6 +16,7 @@ public class Inventory
             return _instatnce;
         }
     }
+<<<<<<< HEAD
     
     public static void AddProduct(Product product) {
         Products.Add(product);
@@ -24,5 +25,7 @@ public class Inventory
         Console.ResetColor();
     }
 
+=======
+>>>>>>> 926b64f (feat: create inventory & product classes)
 
 }
