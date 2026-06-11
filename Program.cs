@@ -6,6 +6,7 @@ Console.WriteLine("""
         Press R to display the products
         Press U to edit product
         Press D to delete product
+        Press F to search product
         Press Q to Exit application
         ---------------------------------------
         """);
@@ -74,6 +75,11 @@ while (true)
         case "d":
             {
                 Inventory.DeleteProduct();
+                break;
+            }
+        case "f":
+            {
+                Inventory.SearchProduct();
                 break;
             }
 

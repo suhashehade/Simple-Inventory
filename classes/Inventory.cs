@@ -104,4 +104,22 @@ public class Inventory
 
     }
 
+    public static void SearchProduct()
+    {
+        Console.Write("Enter product's name to search: ");
+        string? name = Console.ReadLine();
+        Product? p = Products.FirstOrDefault(product => product.Name == name);
+        if (p == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Product not found");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine($"Product name is: {p.Name}, price: {p.Price}, and quantity: {p.Quantity}");
+        }
+
+    }
+
 }
