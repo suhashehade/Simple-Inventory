@@ -41,6 +41,47 @@ public class Inventory
         }
     }
 
+    public static void EditProduct(string name)
+    {
+        Product? p = Products.FirstOrDefault(product => product.Name == name);
+        if (p == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Product not found");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine("What do you want to edit?");
+            Console.WriteLine("1 => Name");
+            Console.WriteLine("2 => Price");
+            Console.WriteLine("3 => Quantity");
 
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Write("New name: ");
+                    p.Name = Console.ReadLine();
+                    break;
+
+                case "2":
+                    Console.Write("New price: ");
+                    p.Price = double.Parse(Console.ReadLine()!);
+                    break;
+
+                case "3":
+                    Console.Write("New quantity: ");
+                    p.Quantity = int.Parse(Console.ReadLine()!);
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid choice");
+                    break;
+            }
+        }
+
+    }
 
 }

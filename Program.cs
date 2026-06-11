@@ -58,6 +58,19 @@ while (true)
                 Inventory.DisplayProducts();
                 break;
             }
+        case "u":
+            {
+                Console.Write("Enter product's name to edit: ");
+                string? nameInput = Console.ReadLine();
+                string name;
+                if (nameInput != "")
+                {
+                    name = nameInput!;
+                    Inventory.EditProduct(name);
+
+                }
+                break;
+            }
 
 
 
