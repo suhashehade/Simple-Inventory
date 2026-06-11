@@ -32,7 +32,7 @@ while (true)
                 Inventory.SearchProduct();
                 break;
             }
-        case "i":
+        case "h":
             {
                 Inventory.DisplayInstructions();
                 break;
