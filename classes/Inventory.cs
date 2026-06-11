@@ -1,24 +1,50 @@
 using System.ComponentModel;
 
-public class Inventory
+public static class Inventory
 {
     public static List<Product> Products = new List<Product>();
-    private static Inventory? _instatnce;
-    private Inventory() { }
-    public static Inventory? Instance
-    {
-        get
-        {
-            if (_instatnce == null)
-            {
-                _instatnce = new Inventory();
-            }
-            return _instatnce;
-        }
-    }
 
-    public static void AddProduct(Product product)
+    private static Product? FindProduct(string name)
     {
+        return Products.FirstOrDefault(p => p.Name!.Equals(name, StringComparison.OrdinalIgnoreCase));
+    }
+    public static void AddProduct()
+    {
+        Console.WriteLine("""
+                I will ask you to enter the name, price, and quantitiy of the product.
+                First of all, enter the name of the product ...
+                """);
+        string? name = Console.ReadLine();
+        while (string.IsNullOrWhiteSpace(name))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Invalid name ❌");
+            Console.ResetColor();
+            name = Console.ReadLine();
+        }
+        Console.WriteLine("Now, enter the price of the product:");
+        string? priceInput = Console.ReadLine();
+        double price;
+        while (!double.TryParse(priceInput, out price))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Invalid price ❌");
+            Console.ResetColor();
+            priceInput = Console.ReadLine();
+        }
+
+        Console.WriteLine("Finally, enter the quantity of the product:");
+        string? quantitiyInput = Console.ReadLine();
+        int quanitiy;
+        while (!int.TryParse(quantitiyInput, out quanitiy))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Invalid quanitiy ❌");
+            Console.ResetColor();
+            quantitiyInput = Console.ReadLine();
+        }
+
+        Product product = new Product(name!, price, quanitiy);
         Products.Add(product);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("The product added successfully ✔️✔️");
@@ -27,6 +53,9 @@ public class Inventory
 
     public static void DisplayProducts()
     {
+        Console.WriteLine("""
+                All products:
+                """);
         if (Products.Count == 0)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -41,9 +70,12 @@ public class Inventory
         }
     }
 
-    public static void EditProduct(string name)
+    public static void EditProduct()
     {
-        Product? p = Products.FirstOrDefault(product => product.Name == name);
+        Console.Write("Enter product's name to edit: ");
+        string? name = Console.ReadLine();
+        Product? p = FindProduct(name!);
+
         if (p == null)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -68,12 +100,29 @@ public class Inventory
 
                 case "2":
                     Console.Write("New price: ");
-                    p.Price = double.Parse(Console.ReadLine()!);
+                    if (double.TryParse(Console.ReadLine(), out double price))
+                    {
+                        p.Price = price;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid price ❌");
+                        Console.ResetColor();
+                    }
                     break;
 
                 case "3":
-                    Console.Write("New quantity: ");
-                    p.Quantity = int.Parse(Console.ReadLine()!);
+                    if (int.TryParse(Console.ReadLine(), out int qty))
+                    {
+                        p.Quantity = qty;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid quantity ❌");
+                        Console.ResetColor();
+                    }
                     break;
 
                 default:
@@ -87,7 +136,7 @@ public class Inventory
     {
         Console.Write("Enter product's name to delete: ");
         string? name = Console.ReadLine();
-        Product? p = Products.FirstOrDefault(product => product.Name == name);
+        Product? p = FindProduct(name!);
         if (p == null)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -108,7 +157,7 @@ public class Inventory
     {
         Console.Write("Enter product's name to search: ");
         string? name = Console.ReadLine();
-        Product? p = Products.FirstOrDefault(product => product.Name == name);
+        Product? p = FindProduct(name!);
         if (p == null)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -118,7 +167,23 @@ public class Inventory
         else
         {
             Console.WriteLine($"Product name is: {p.Name}, price: {p.Price}, and quantity: {p.Quantity}");
+
         }
+
+    }
+    public static void DisplayInstructions()
+    {
+        Console.WriteLine("""
+        Insructions:
+        Press H to display instructions
+        Press A to add product
+        Press R to display the products
+        Press U to edit product
+        Press D to delete product
+        Press F to search product
+        Press Q to Exit application
+        ---------------------------------------
+        """);
 
     }
 
