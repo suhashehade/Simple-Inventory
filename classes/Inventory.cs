@@ -83,5 +83,25 @@ public class Inventory
         }
 
     }
+    public static void DeleteProduct()
+    {
+        Console.Write("Enter product's name to delete: ");
+        string? name = Console.ReadLine();
+        Product? p = Products.FirstOrDefault(product => product.Name == name);
+        if (p == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Product not found");
+            Console.ResetColor();
+        }
+        else
+        {
+            Products.Remove(p);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Product deleted sucessfully");
+            Console.ResetColor();
+        }
+
+    }
 
 }

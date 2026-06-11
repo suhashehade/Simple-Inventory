@@ -71,8 +71,11 @@ while (true)
                 }
                 break;
             }
-
-
+        case "d":
+            {
+                Inventory.DeleteProduct();
+                break;
+            }
 
     }
     input = Console.ReadLine();
