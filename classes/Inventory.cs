@@ -113,104 +113,114 @@ public static class Inventory
             return;
         }
 
-        Console.WriteLine("What do you want to edit?");
-        Console.WriteLine("1 => Name");
-        Console.WriteLine("2 => Price");
-        Console.WriteLine("3 => Quantity");
-
-        string? choice = Console.ReadLine();
-
-        switch (choice)
+        while (true)
         {
-            case "1":
-                {
-                    Console.Write("New name: ");
-                    string? newName = Console.ReadLine();
+            Console.WriteLine($"""
+        Editing: {p.Name} | Price: {p.Price} | Quantity: {p.Quantity}
 
-                    while (string.IsNullOrWhiteSpace(newName))
+        What do you want to edit?
+        1 => Name
+        2 => Price
+        3 => Quantity
+        0 => Done
+        """);
+
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Invalid name ❌");
-                        Console.ResetColor();
-                        newName = Console.ReadLine();
-                    }
+                        Console.Write("New name: ");
+                        string? newName = Console.ReadLine();
 
-                    p.Name = newName;
-                    break;
-                }
-
-            case "2":
-                {
-                    Console.Write("New price: ");
-                    double price;
-
-                    while (true)
-                    {
-                        string? input = Console.ReadLine();
-
-                        if (!double.TryParse(input, out price))
+                        while (string.IsNullOrWhiteSpace(newName))
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Invalid price ❌");
+                            Console.WriteLine("Invalid name ❌");
                             Console.ResetColor();
-                            continue;
+                            newName = Console.ReadLine();
                         }
 
-                        if (price <= 0)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Price should be more than 0 ❌");
-                            Console.ResetColor();
-                            continue;
-                        }
-
+                        p.Name = newName;
                         break;
                     }
 
-                    p.Price = price;
-                    break;
-                }
-
-            case "3":
-                {
-                    Console.Write("New quantity: ");
-                    int quantity;
-
-                    while (true)
+                case "2":
                     {
-                        string? input = Console.ReadLine();
+                        Console.Write("New price: ");
+                        double price;
 
-                        if (!int.TryParse(input, out quantity))
+                        while (true)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Invalid quantity ❌");
-                            Console.ResetColor();
-                            continue;
+                            string? input = Console.ReadLine();
+
+                            if (!double.TryParse(input, out price))
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Invalid price ❌");
+                                Console.ResetColor();
+                                continue;
+                            }
+
+                            if (price <= 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Price should be more than 0 ❌");
+                                Console.ResetColor();
+                                continue;
+                            }
+
+                            break;
                         }
 
-                        if (quantity <= 0)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Quantity should be more than 0 ❌");
-                            Console.ResetColor();
-                            continue;
-                        }
-
+                        p.Price = price;
                         break;
                     }
 
-                    p.Quantity = quantity;
-                    break;
-                }
+                case "3":
+                    {
+                        Console.Write("New quantity: ");
+                        int quantity;
 
-            default:
-                Console.WriteLine("Invalid choice ❌");
-                return;
+                        while (true)
+                        {
+                            string? input = Console.ReadLine();
+
+                            if (!int.TryParse(input, out quantity))
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Invalid quantity ❌");
+                                Console.ResetColor();
+                                continue;
+                            }
+
+                            if (quantity <= 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Quantity should be more than 0 ❌");
+                                Console.ResetColor();
+                                continue;
+                            }
+
+                            break;
+                        }
+
+                        p.Quantity = quantity;
+                        break;
+                    }
+
+                case "0":
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Finished editing ✔️✔️");
+                    Console.ResetColor();
+                    return;
+
+                default:
+                    Console.WriteLine("Invalid choice ❌");
+                    break;
+            }
         }
-
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Product updated successfully ✔️✔️");
-        Console.ResetColor();
     }
     public static void DeleteProduct()
     {
