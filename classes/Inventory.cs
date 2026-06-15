@@ -2,99 +2,52 @@ using System.ComponentModel;
 
 public static class Inventory
 {
-    public static List<Product> Products = new List<Product>();
+    enum MessageType
+    {
+        Error,
+        Success,
+        Warning,
+        Info,
+        Default
+    }
+
+    private static readonly List<Product> Products = [];
 
     private static Product? FindProduct(string name)
     {
         return Products.FirstOrDefault(p => p.Name!.Equals(name, StringComparison.OrdinalIgnoreCase));
     }
+
     public static void AddProduct()
     {
-        Console.WriteLine("""
-                I will ask you to enter the name, price, and quantitiy of the product.
-                First of all, enter the name of the product ...
-                """);
-        string? name = Console.ReadLine();
-        while (string.IsNullOrWhiteSpace(name))
+        string name = ReadValidString("Enter product name: ");
+        double price = ReadValidDouble("Enter price: ");
+        int quantity = ReadValidInt("Enter quantity: ");
+
+        Products.Add(new Product
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Invalid name ❌");
-            Console.ResetColor();
-            name = Console.ReadLine();
-        }
-        Console.WriteLine("Now, enter the price of the product:");
-        double price;
+            Name = name,
+            Price = price,
+            Quantity = quantity
+        });
 
-        while (true)
-        {
-            string? priceInput = Console.ReadLine();
-
-            if (!double.TryParse(priceInput, out price))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid price ❌");
-                Console.ResetColor();
-                continue;
-            }
-
-            if (price <= 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Price should be more than 0 ❌");
-                Console.ResetColor();
-                continue;
-            }
-
-            break;
-        }
-        Console.WriteLine("Finally, enter the quantity of the product:");
-        int quantity;
-
-        while (true)
-        {
-            string? quantityInput = Console.ReadLine();
-
-            if (!int.TryParse(quantityInput, out quantity))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid quantity ❌");
-                Console.ResetColor();
-                continue;
-            }
-
-            if (quantity <= 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Quantity should be more than 0 ❌");
-                Console.ResetColor();
-                continue;
-            }
-
-            break;
-        }
-        Product product = new Product(name!, price, quantity);
-        Products.Add(product);
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("The product added successfully ✔️✔️");
-        Console.ResetColor();
+        PrintMessage("Product added ✔️✔️", MessageType.Success);
     }
 
     public static void DisplayProducts()
     {
-        Console.WriteLine("""
+        PrintMessage("""
                 All products:
-                """);
+                """, MessageType.Info);
         if (Products.Count == 0)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("No products to display");
-            Console.ResetColor();
+            PrintMessage("No products to display", MessageType.Error);
         }
         Console.WriteLine("{0,-10} {1,-10} {2,-10}", "Name", "Price", "Quantity");
         Console.WriteLine("------------------------------------");
-        foreach (var p in Products)
+        foreach (var product in Products)
         {
-            Console.WriteLine($"{p.Name,-10} {p.Price,-10} {p.Quantity,-10}");
+            PrintMessage($"{product.Name,-10} {product.Price,-10} {product.Quantity,-10}", MessageType.Default);
         }
     }
 
@@ -107,121 +60,48 @@ public static class Inventory
 
         if (p == null)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Product not found ❌");
-            Console.ResetColor();
+            PrintMessage("Product not found ❌", MessageType.Error);
             return;
         }
 
         while (true)
         {
-            Console.WriteLine($"""
-        Editing: {p.Name} | Price: {p.Price} | Quantity: {p.Quantity}
-
-        What do you want to edit?
-        1 => Name
-        2 => Price
-        3 => Quantity
-        0 => Done
-        """);
+            PrintMessage($"""
+                    Editing: {p.Name} | Price: {p.Price} | Quantity: {p.Quantity}
+                    What do you want to edit?
+                    1 => Name
+                    2 => Price
+                    3 => Quantity
+                    0 => Done
+                    """, MessageType.Info);
 
             string? choice = Console.ReadLine();
 
             switch (choice)
             {
                 case "1":
-                    {
-                        Console.Write("New name: ");
-                        string? newName = Console.ReadLine();
-
-                        while (string.IsNullOrWhiteSpace(newName))
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Invalid name ❌");
-                            Console.ResetColor();
-                            newName = Console.ReadLine();
-                        }
-
-                        p.Name = newName;
-                        break;
-                    }
+                    p.Name = ReadValidString("New name: ");
+                    break;
 
                 case "2":
-                    {
-                        Console.Write("New price: ");
-                        double price;
-
-                        while (true)
-                        {
-                            string? input = Console.ReadLine();
-
-                            if (!double.TryParse(input, out price))
-                            {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Invalid price ❌");
-                                Console.ResetColor();
-                                continue;
-                            }
-
-                            if (price <= 0)
-                            {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Price should be more than 0 ❌");
-                                Console.ResetColor();
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        p.Price = price;
-                        break;
-                    }
+                    p.Price = ReadValidDouble("New price: ");
+                    break;
 
                 case "3":
-                    {
-                        Console.Write("New quantity: ");
-                        int quantity;
-
-                        while (true)
-                        {
-                            string? input = Console.ReadLine();
-
-                            if (!int.TryParse(input, out quantity))
-                            {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Invalid quantity ❌");
-                                Console.ResetColor();
-                                continue;
-                            }
-
-                            if (quantity <= 0)
-                            {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Quantity should be more than 0 ❌");
-                                Console.ResetColor();
-                                continue;
-                            }
-
-                            break;
-                        }
-
-                        p.Quantity = quantity;
-                        break;
-                    }
+                    p.Quantity = ReadValidInt("New quantity: ");
+                    break;
 
                 case "0":
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Finished editing ✔️✔️");
-                    Console.ResetColor();
+                    PrintMessage("Finished editing ✔️✔️", MessageType.Success);
                     return;
 
                 default:
-                    Console.WriteLine("Invalid choice ❌");
+                    PrintMessage("Invalid choice ❌", MessageType.Error);
                     break;
             }
         }
     }
+
     public static void DeleteProduct()
     {
         Console.Write("Enter product's name to delete: ");
@@ -229,16 +109,12 @@ public static class Inventory
         Product? p = FindProduct(name!);
         if (p == null)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Product not found");
-            Console.ResetColor();
+            PrintMessage("Product not found ❌", MessageType.Error);
         }
         else
         {
             Products.Remove(p);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Product deleted sucessfully");
-            Console.ResetColor();
+            PrintMessage("Product deleted sucessfully", MessageType.Success);
         }
 
     }
@@ -250,20 +126,18 @@ public static class Inventory
         Product? p = FindProduct(name!);
         if (p == null)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Product not found");
-            Console.ResetColor();
+            PrintMessage("Product not found ❌", MessageType.Error);
         }
         else
         {
-            Console.WriteLine($"Product name is: {p.Name}, price: {p.Price}, and quantity: {p.Quantity}");
-
+            PrintMessage($"Product name is: {p.Name}, price: {p.Price}, and quantity: {p.Quantity}", MessageType.Info);
         }
 
     }
+
     public static void DisplayInstructions()
     {
-        Console.WriteLine("""
+        PrintMessage("""
         Insructions:
         Press H to display instructions
         Press A to add product
@@ -273,8 +147,104 @@ public static class Inventory
         Press F to search product
         Press Q to Exit application
         ---------------------------------------
-        """);
+        """, MessageType.Info);
 
     }
+
+    private static string ReadValidString(string message)
+    {
+        Console.Write(message);
+        string? input = Console.ReadLine();
+
+        while (string.IsNullOrWhiteSpace(input))
+        {
+            PrintMessage("Invalid input ❌", MessageType.Error);
+            input = Console.ReadLine();
+        }
+
+        return input;
+    }
+
+    private static double ReadValidDouble(string message)
+    {
+        Console.Write(message);
+
+        while (true)
+        {
+            string? input = Console.ReadLine();
+
+            if (!double.TryParse(input, out double value))
+            {
+                PrintMessage("Invalid number ❌", MessageType.Error);
+                continue;
+            }
+
+            if (value <= 0)
+            {
+                PrintMessage("Must be > 0 ❌", MessageType.Error);
+                continue;
+            }
+
+            return value;
+        }
+    }
+
+    private static int ReadValidInt(string message)
+    {
+        Console.Write(message);
+
+        while (true)
+        {
+            string? input = Console.ReadLine();
+
+            if (!int.TryParse(input, out int value))
+            {
+                PrintMessage("Invalid number ❌", MessageType.Error);
+                continue;
+            }
+
+            if (value <= 0)
+            {
+                PrintMessage("Must be > 0 ❌", MessageType.Error);
+                continue;
+            }
+
+            return value;
+        }
+    }
+
+    private static void PrintMessage(string message, MessageType type)
+    {
+        switch (type)
+        {
+            case MessageType.Error:
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                }
+            case MessageType.Success:
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                }
+            case MessageType.Warning:
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                }
+            case MessageType.Info:
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    break;
+                }
+            default:
+                Console.ForegroundColor = ConsoleColor.White;
+                break;
+        }
+
+        Console.WriteLine(message);
+        Console.ResetColor();
+    }
+
 
 }

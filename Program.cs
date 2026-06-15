@@ -2,10 +2,12 @@
 Console.ResetColor();
 Console.WriteLine("Welcome to this console-based inventory application 😎");
 Inventory.DisplayInstructions();
+
 while (true)
 {
     Console.Write(@"inv cmd > ");
     string? input = Console.ReadLine()?.ToLower();
+    Console.ResetColor();
     switch (input)
     {
         case "a":
@@ -40,7 +42,6 @@ while (true)
             }
         case "q":
             {
-                Console.ResetColor();
                 return;
             }
 
