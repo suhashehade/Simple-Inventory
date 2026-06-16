@@ -38,7 +38,7 @@ class Program
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Invalid command");
+                Console.WriteLine($"Invalid command {ex.Message}");
             }
 
         }
