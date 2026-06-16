@@ -1,7 +1,4 @@
-﻿using System.Collections;
-
-
-class Program
+class AddProductCommand : ICommand
 {
     enum MessageType
     {
@@ -11,37 +8,14 @@ class Program
         Info,
         Default
     }
-    static void Main()
+    public void Execute()
     {
-        Console.ResetColor();
-        Console.WriteLine("Welcome to this console-based inventory application 😎");
-        DisplayInstructions();
+        string name = ReadValidString("Enter name: ");
+        double price = ReadValidDouble("Enter price: ");
+        int quantity = ReadValidInt("Enter quantity: ");
 
-        while (true)
-        {
-            Console.Write(@"inv cmd > ");
-            string? input = Console.ReadLine()?.ToLower();
-            Console.ResetColor();
-            var commands = new Dictionary<string, ICommand>
-            {
-                { "a", new AddProductCommand() },
-                { "r", new DisplayProductsCommand() },
-                { "u", new UpdateProductCommand() },
-                { "d", new DeleteProductCommand() },
-                { "f", new FindProductCommand() },
-                { "h", new HelpCommand() },
-                { "q", new ExitCommand() }
-            };
-            try
-            {
-                commands[input!].Execute();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Invalid command");
-            }
-
-        }
+        string msg = Inventory.AddProduct(name, price, quantity);
+        PrintMessage(msg, MessageType.Success);
     }
     public static void DisplayInstructions()
     {
@@ -135,6 +109,4 @@ class Program
         Console.WriteLine(message);
         Console.ResetColor();
     }
-
-
 }
