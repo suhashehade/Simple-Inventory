@@ -1,20 +1,12 @@
 class DisplayProductsCommand : ICommand
 {
-    enum MessageType
-    {
-        Error,
-        Success,
-        Warning,
-        Info,
-        Default
-    }
     public void Execute()
     {
         var products = Inventory.DisplayProducts();
 
         if (products.Count == 0)
         {
-            PrintMessage("No products ❌", MessageType.Error);
+            Logger.PrintMessage("No products ❌", Logger.MessageType.Error);
             return;
         }
 
@@ -22,23 +14,9 @@ class DisplayProductsCommand : ICommand
 
         foreach (var p in products)
         {
-            PrintMessage($"{p!.Name,-10} {p.Price,-10} {p.Quantity,-10}", MessageType.Info);
+            Logger.PrintMessage($"{p!.Name,-10} {p.Price,-10} {p.Quantity,-10}", Logger.MessageType.Info);
         }
     }
 
 
-    private static void PrintMessage(string message, MessageType type)
-    {
-        Console.ForegroundColor = type switch
-        {
-            MessageType.Error => ConsoleColor.Red,
-            MessageType.Success => ConsoleColor.Green,
-            MessageType.Warning => ConsoleColor.Yellow,
-            MessageType.Info => ConsoleColor.Cyan,
-            _ => ConsoleColor.White
-        };
-
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
 }

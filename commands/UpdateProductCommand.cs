@@ -1,21 +1,14 @@
 class UpdateProductCommand : ICommand
 {
-    enum MessageType
-    {
-        Error,
-        Success,
-        Warning,
-        Info,
-        Default
-    }
+
     public void Execute()
     {
-        string name = ReadValidString("Enter name: ");
+        string name = Validator.ReadValidString("Enter name: ");
         var p = Inventory.SearchProduct(name);
 
         if (p == null)
         {
-            PrintMessage("Not found ❌", MessageType.Error);
+            Logger.PrintMessage("Not found ❌", Logger.MessageType.Error);
             return;
         }
 
@@ -36,7 +29,7 @@ class UpdateProductCommand : ICommand
 
             if (field == "")
             {
-                PrintMessage("Invalid ❌", MessageType.Error);
+                Logger.PrintMessage("Invalid ❌", Logger.MessageType.Error);
                 continue;
             }
 
@@ -44,41 +37,11 @@ class UpdateProductCommand : ICommand
             string? value = Console.ReadLine();
 
             if (Inventory.EditProduct(p, field, value!))
-                PrintMessage("Updated ✔️", MessageType.Success);
+                Logger.PrintMessage("Updated ✔️", Logger.MessageType.Success);
             else
-                PrintMessage("Invalid value ❌", MessageType.Error);
+                Logger.PrintMessage("Invalid value ❌", Logger.MessageType.Error);
         }
 
     }
 
-
-    private static string ReadValidString(string message)
-    {
-        Console.Write(message);
-        string? input = Console.ReadLine();
-
-        while (string.IsNullOrWhiteSpace(input))
-        {
-            PrintMessage("Invalid input ❌", MessageType.Error);
-            input = Console.ReadLine();
-        }
-
-        return input;
-    }
-
-
-    private static void PrintMessage(string message, MessageType type)
-    {
-        Console.ForegroundColor = type switch
-        {
-            MessageType.Error => ConsoleColor.Red,
-            MessageType.Success => ConsoleColor.Green,
-            MessageType.Warning => ConsoleColor.Yellow,
-            MessageType.Info => ConsoleColor.Cyan,
-            _ => ConsoleColor.White
-        };
-
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
 }
